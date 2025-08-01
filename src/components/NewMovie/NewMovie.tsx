@@ -17,8 +17,12 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   const pattern =
     // eslint-disable-next-line max-len
     /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@,.\w_]*)#?(?:[,.!/\\\w]*))?)$/;
-  const isFormValid =
-    title.trim() && imgUrl.trim() && imdbUrl.trim() && imdbId.trim();
+  const isFormValid = !!(
+    title.trim() &&
+    imgUrl.trim() &&
+    imdbUrl.trim() &&
+    imdbId.trim()
+  );
 
   const isValid = pattern.test(imgUrl) && pattern.test(imdbUrl);
 
@@ -33,7 +37,7 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   function handleSubmitForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (isFormValid === '') {
+    if (!isFormValid) {
       return;
     }
 
@@ -102,7 +106,7 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
             type="submit"
             data-cy="submit-button"
             className="button is-link"
-            disabled={isFormValid === '' || isValid === false ? true : false}
+            disabled={!isFormValid || !isValid ? true : false}
           >
             Add
           </button>
