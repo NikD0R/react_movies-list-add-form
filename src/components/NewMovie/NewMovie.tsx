@@ -8,19 +8,19 @@ type Props = {
 };
 
 export const NewMovie: React.FC<Props> = ({ onAdd }) => {
-  // Increase the count after successful form submission
-  // to reset touched status of all the `Field`s
   const [count, setCount] = useState(0);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [imgUrl, setImgUrl] = useState('');
   const [imdbUrl, setImdbUrl] = useState('');
   const [imdbId, setImdbId] = useState('');
-  const isFormValid =
-    title.trim() && imgUrl.trim() && imdbUrl.trim() && imdbId.trim();
   const pattern =
     // eslint-disable-next-line max-len
     /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www\.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@,.\w_]*)#?(?:[,.!/\\\w]*))?)$/;
+  const isFormValid =
+    title.trim() && imgUrl.trim() && imdbUrl.trim() && imdbId.trim();
+
+  const isValid = pattern.test(imgUrl) && pattern.test(imdbUrl);
 
   function reset() {
     setTitle('');
@@ -34,6 +34,10 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
     event.preventDefault();
 
     if (isFormValid === '') {
+      return;
+    }
+
+    if (isValid === false) {
       return;
     }
 
@@ -73,7 +77,6 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
         label="Image URL"
         value={imgUrl}
         onChange={setImgUrl}
-        validate={(value: string) => pattern.test(value)}
         required
       />
 
@@ -82,7 +85,6 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
         label="Imdb URL"
         value={imdbUrl}
         onChange={setImdbUrl}
-        validate={(value: string) => pattern.test(value)}
         required
       />
 
@@ -100,7 +102,7 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
             type="submit"
             data-cy="submit-button"
             className="button is-link"
-            disabled={isFormValid === '' ? true : false}
+            disabled={isFormValid === '' || isValid === false ? true : false}
           >
             Add
           </button>
