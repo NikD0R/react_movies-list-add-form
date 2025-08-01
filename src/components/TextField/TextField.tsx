@@ -53,15 +53,17 @@ export const TextField: React.FC<Props> = ({
           value={value}
           onChange={event => {
             onChange(event.target.value);
-            if (
-              event.target.name === 'imgUrl' ||
-              event.target.name === 'imdbUrl'
-            ) {
-              setIsValidImgUrl(pattern.test(event.target.value));
-              setIsValidImdbUrl(pattern.test(event.target.value));
+          }}
+          onBlur={() => {
+            setTouched(true);
+            if (name === 'imgUrl') {
+              setIsValidImgUrl(pattern.test(value));
+            }
+
+            if (name === 'imdbUrl') {
+              setIsValidImdbUrl(pattern.test(value));
             }
           }}
-          onBlur={() => setTouched(true)}
         />
       </div>
 
